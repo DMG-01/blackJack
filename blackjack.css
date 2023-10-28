@@ -1,0 +1,107 @@
+body{
+    background-color:green;
+    text-align:center;
+    }
+    #display{
+        margin-top:5%;
+    }
+    #cards{
+        margin: top 5%;
+    }
+    #sum{
+        margin-top:5%;
+    }
+    button{
+        margin-top:5%;
+        color:green;
+        background-color: goldenrod;
+        width:200px;
+        height:50px;
+        border:none;
+        border-radius:30px;
+    }
+    p{
+        margin-top:5%;
+        font-size:50px;
+    }
+    #computer{
+       position:absolute;
+        top:10px;
+        right:5px;
+        background-color:turquoise;
+        width:30%;
+        color:black;
+    }
+    #push{
+        display: none;
+        border:none;
+        background-color:green;
+        color:aliceblue;
+        font-size:30px;
+    }
+    #push:hover{
+        font-size:40px;
+    }
+    #computer h4{
+        color:red;
+        font-style:italic;
+    }
+    h3{
+        font-size:35px;
+        color:white;
+    }
+    #price{
+        position:absolute;
+        top:200%;
+    }
+    #stake{
+        position:absolute;
+        left:10px;
+        top:4%;
+        width:200px;
+        height:auto;
+        border:solid 2px ;
+        height:35px;
+        background-color: transparent;
+        color:white;
+        border:1px solid goldenrod;
+        
+    }
+     #send{
+    position:absolute;
+    left: 20px;
+    top:30px;
+        background-color: goldenrod;
+    }
+    h5{
+        font-size:30px;
+        float:left;
+    position: absolute;
+    top:100px;
+    left:20px;
+    margin-top:80px;
+    }
+    h6{
+        font-size:30px;
+        float:left;
+    position: absolute;
+    top:200px;
+    left:20px;
+    margin-top:80px;
+    }
+    #computer-stake{
+        font-size:30px;
+        float:left;
+    position: absolute;
+    top:320px;
+    left:20px;
+    margin-top:80px;
+    }
+    #total-win{
+        font-size:30px;
+        float:left;
+    position: absolute;
+    top:430px;
+    left:20px;
+    margin-top:80px;
+    }
