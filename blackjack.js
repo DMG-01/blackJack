@@ -60,6 +60,7 @@ function startGame() {
     cards = [firstCard, secondCard];
     sum = firstCard + secondCard;
     renderGame();
+    
   if(compSum > 15) {
       judge = Math.floor(Math.random() * 2)
       if(judge == 1) {
