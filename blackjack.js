@@ -1,16 +1,32 @@
 // add code that allows computer to hold
 // add code that allows anyone to play first
-// fix bug when the two players have sum abov 21 ---- DONE  
+// fix bug when the two players have sum abov 21 ---- DONE
 // number to track who has played ++ ----- DONE
 // modify the computer stake  -----------DONE
 //implement the stake function ----------DONE
 // implement a get name stuff
 //implement a end game stuff
+/*
+import {ethers} from "./ethers-5.6.esm.min.js"
+import {contractAddress, ABI} from "./constant.js"
 
-let hasComputerPlayed = false
+
+let connectButton = document.getElementById("connectButton")
+connectButton.onclick = connect
+*/
+const Stake = document.getElementById("send");
+Stake.onclick = stake;
+const start = document.getElementById("start-game");
+start.onclick = startGame;
+const NewCard = document.getElementById("new-card");
+NewCard.onclick = newCard;
+const Hold = document.getElementById("hold-game");
+Hold.onclick = hold;
+let hasComputerPlayed = false;
 let cards = [];
 let sum = 0;
-let totalStake = 0
+let total = 0
+let totalStake = 0;
 let yourstake = 0;
 let hasBlackJack = false;
 let isAlive = true;
@@ -34,6 +50,21 @@ let playerr = {
   price: 890,
 };
 playerMoney.innerHTML += "$" + money;
+
+/**WEB3 FUNCTIONS HERE */
+/*
+async function connect() {
+if(window.ethereum != "undefined"){
+  try {
+    await window.ethereum.request({method:"eth_RequestAccounts"})
+  }catch(error){
+    console.log(error)
+  }
+}
+}
+*/
+/**WEB3 FUNCTIONS END */
+
 function getRandomCard() {
   let omo = Math.floor(Math.random() * 13) + 1;
   if (omo > 10) {
@@ -50,32 +81,30 @@ function startGame() {
     alert("HEY,YOU HAVENT PLACED ANY BET YET");
   } else if (hasGameEnded == false) {
     alert("PREVIOUS GAME HASNT ENDED");
-  } 
-  else {
+  } else {
     isAlive = true;
     hasGameEnded = false;
     winnerEl.textContent = "GAME ON ";
-    firstCard = getRandomCard();
-    secondCard = getRandomCard();
+    let firstCard = getRandomCard();
+    let secondCard = getRandomCard();
     cards = [firstCard, secondCard];
     sum = firstCard + secondCard;
     renderGame();
-    
-  if(compSum > 15) {
-      judge = Math.floor(Math.random() * 2)
-      if(judge == 1) {
-        setTimeout(computerHold,1000)
+
+    if (compSum > 15) {
+      judge = Math.floor(Math.random() * 2);
+      if (judge == 1) {
+        setTimeout(computerHold, 1000);
       } else {
-    setTimeout(firstDisplay, 3000);
+        setTimeout(firstDisplay, 3000);
       }
-    }
-    else {
-      setTimeout(computerNew, 3000)
-      setTimeout(firstDisplay, 3000)
+    } else {
+      setTimeout(computerNew, 3000);
+      setTimeout(firstDisplay, 3000);
     }
   }
-    time();
-  }
+  time();
+}
 
 function time() {
   setTimeout(computerGame, 3000);
@@ -103,18 +132,18 @@ function renderGame() {
     hasGameEnded = true;
     hasStaked = false;
     winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
-    money = money + total
-    playerMoney.innerHTML = "MONEY:$" + money
-    setTimeout(reload,5000)
+    money = money + total;
+    playerMoney.innerHTML = "MONEY:$" + money;
+    setTimeout(reload, 5000);
   } else {
     message = "you are out of the game";
     hasBlackJack = false;
     isAlive = false;
     hasGameEnded = true;
-    hasStaked = false
+    hasStaked = false;
     //money = money - total
     //playerMoney.innerHTML = "MONEY:$" + money
-    setTimeout(reload,5000)
+    setTimeout(reload, 5000);
     // winner()
   }
   messageEL.textContent = message;
@@ -144,7 +173,7 @@ function computerGame() {
   let computerCard2 = getRandomCard();
   computerCards = [computerCard1, computerCard2];
   computerSum = computerCard1 + computerCard2;
-  hasComputerPlayed =  true
+  hasComputerPlayed = true;
   computerGameRender();
 }
 
@@ -165,30 +194,29 @@ function computerGameRender() {
     hasGameEnded = true;
     winnerEl.textContent = "YOU LOST!!!!!!!!!!!!!!!!!!!";
     //money = money - total
-    playerMoney.innerHTML = "MONEY:$" + money
+    playerMoney.innerHTML = "MONEY:$" + money;
     setTimeout(reload, 5000);
-    hasStaked = false
-  } else if(sum === 21 && computerSum < 21 ){
+    hasStaked = false;
+  } else if (sum === 21 && computerSum < 21) {
     computerHasBlackJack = false;
     isComputerAlive = false;
     hasGameEnded = true;
     draw();
     winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
     hasBlackJack = true;
-    hasStaked = false
-    money = money + total
-    playerMoney.innerHTML = "MONEY:$" + money
+    hasStaked = false;
+    money = money + total;
+    playerMoney.innerHTML = "MONEY:$" + money;
     setTimeout(reload, 5000);
-  }
-  else if (computerSum > 21 &&  sum < 21) {
-    computerHasBlackJack =  false
-    isComputerAlive = false
-    hasGameEnded = true
-    winnerEl.textContent = "YOU WON!!!!!!!!!!!!!"
-    hasBlackJack = true 
-    money = money + total
-    playerMoney.innerHTML = "MONEY:$" + money
-    setTimeout(reload, 5000)
+  } else if (computerSum > 21 && sum < 21) {
+    computerHasBlackJack = false;
+    isComputerAlive = false;
+    hasGameEnded = true;
+    winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
+    hasBlackJack = true;
+    money = money + total;
+    playerMoney.innerHTML = "MONEY:$" + money;
+    setTimeout(reload, 5000);
   }
 }
 function computerNew() {
@@ -197,34 +225,33 @@ function computerNew() {
     computerSum += compNewCard;
     computerCards.push(compNewCard);
     computerGameRender();
-    hasComputerPlayed = true
+    hasComputerPlayed = true;
   }
 }
 function reload() {
   //location.reload();
-  sumEl.textContent = "sum:"
-  totalWin.innerHTML = "YOUR-STAKE: $"
-  cards = []
+  sumEl.textContent = "sum:";
+  totalWin.innerHTML = "YOUR-STAKE: $";
+  cards = [];
   card.textContent = "CARDS:";
   for (let i = 0; i < cards.length; i++) {
-    card.textContent += cards[i] + ","
+    card.textContent += cards[i] + ",";
   }
 
-  computerCards = []
-  computerSum = 0
+  computerCards = [];
+  computerSum = 0;
   compCards.textContent = "CARDS:";
   for (let i = 0; i < computerCards.length; i++) {
     compCards.textContent += computerCards[i] + ",";
   }
-  compSum.innerHTML = "SUM:" + computerSum
-    messageEL.textContent = ""
-    winnerEl.textContent = "" 
-    document.getElementById("stake").value = ""
-    yourStake.innerHTML = "YOUR-STAKE : $"
-    computerStake.innerHTML =  "COMPUTER-STAKE:$"
-    
-    hasStaked = false
+  compSum.innerHTML = "SUM:" + computerSum;
+  messageEL.textContent = "";
+  winnerEl.textContent = "";
+  document.getElementById("stake").value = "";
+  yourStake.innerHTML = "YOUR-STAKE : $";
+  computerStake.innerHTML = "COMPUTER-STAKE:$";
 
+  hasStaked = false;
 }
 /*  function winner(){
         if (computerSum < 22 && sum > 21 || computerSum > 21 && sum < 22 ){
@@ -243,28 +270,26 @@ function hold() {
 //STAKE CODE
 
 function stake() {
-   yourstake = document.getElementById("stake").value;
-   if(yourstake > money) {
-    alert("INSUFFICIENT BALANCE!")
-   }
-   else if(yourstake < 0) {
-    alert("INVALID STAKE")
-   }
-   else{
-  money = money - yourstake;
-  let first = Math.floor(Math.random() * yourstake + 1);
+  yourstake = document.getElementById("stake").value;
+  if (yourstake > money) {
+    alert("INSUFFICIENT BALANCE!");
+  } else if (yourstake < 0) {
+    alert("INVALID STAKE");
+  } else {
+    money = money - yourstake;
+    let first = Math.floor(Math.random() * yourstake + 1);
    total = parseInt(yourstake) + first;
- // alert(total)
-  computerStake.innerHTML += first;
-  yourStake.innerHTML = "YOUR-STAKE : $" + yourstake;
-  playerMoney.innerHTML = "MONEY:$" + money;
+    // alert(total)
+    computerStake.innerHTML += first;
+    yourStake.innerHTML = "YOUR-STAKE : $" + yourstake;
+    playerMoney.innerHTML = "MONEY:$" + money;
 
-  totalWin.innerHTML = "TOTAL: $" + total;
-  hasStaked = true;
-   }
+    totalWin.innerHTML = "TOTAL: $" + total;
+    hasStaked = true;
+  }
 }
 
 function computerHold() {
-  hasComputerPlayed = true 
+  hasComputerPlayed = true;
 }
 //yourstake = 0

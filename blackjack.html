@@ -7,21 +7,34 @@
     <title>Document</title>
     <link rel="stylesheet" href="blackjack.css">
 </head>
-<body>
-    <button id="send"  onclick="stake()">STAKE</button>
-    <h5 id="player-money">MONEY:</h5>
-    <h6 id="your-stake">YOUR STAKE : $</h6>
-    <h6 id="computer-stake"> COMPUTER-STAKE : $</h6>
-    <h6 id="total-win">TOTAL: $</h6>
+<body> 
+    <div class="top">
+    <div class="top-one">
+    <div><button id="connectButton">CONNECT</button></div>
+    <div> <input type='number' id =stake placeholer="input your stake"></div>
+   <div> <button id="send">STAKE</button></div>
+    </div>
+
+    <div class="top-two">
+        <div class="twoOne">
+    <div><h5 id="player-money">MONEY:</h5></div>
+    <div><h6 id="your-stake">YOUR STAKE : $</h6></div>
+        </div>
+        <div class="twotwo">
+    <div><h6 id="computer-stake"> COMPUTER-STAKE : $</h6></div>
+   <div><h6 id="total-win">TOTAL: $</h6></div>
+        </div>
+    </div>
+    </div>
     <h1> BLACK JACK</h1>
     <h3 id="winner-el">Game on</h3>
     <h2 id=display></h2>
     <h2 id="cards">  CARDS:</h2>
     <h2 id="sum-el">SUM: </h2>
 
-    <button onclick="startGame()" >START GAME</button><bR>
-    <button onclick="newCard()"> new card</button><br>
-    <button onclick="hold()"> HOLD </button>
+    <button id="start-game">START GAME</button><bR>
+    <button id="new-card"> new card</button><br>
+    <button id="hold-game"> HOLD </button>
     
 
     <div id="computer">
@@ -29,9 +42,7 @@
         <h2 id="computer-cards">Cards:</h2>
         <h4 id="compD">...</h4>
     </div>
-   <div id="money">
-    <input type='number' id =stake placeholer="input your stake">
-   </div>
-<script src="blackjack.js"></script>
+   
+<script src="./blackjack.js" type="module"></script>
 </body>
 </html>
