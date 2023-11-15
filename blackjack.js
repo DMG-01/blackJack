@@ -6,14 +6,13 @@
 //implement the stake function ----------DONE
 // implement a get name stuff
 //implement a end game stuff
-/*
-import {ethers} from "./ethers-5.6.esm.min.js"
-import {contractAddress, ABI} from "./constant.js"
 
+import { ethers } from "./ethers-5.6.esm.min.js";
+import { contractAddress, ABI } from "./constant.js";
 
-let connectButton = document.getElementById("connectButton")
-connectButton.onclick = connect
-*/
+let connectButton = document.getElementById("connectButton");
+connectButton.onclick = connect;
+
 const Stake = document.getElementById("send");
 Stake.onclick = stake;
 const start = document.getElementById("start-game");
@@ -25,7 +24,7 @@ Hold.onclick = hold;
 let hasComputerPlayed = false;
 let cards = [];
 let sum = 0;
-let total = 0
+let total = 0;
 let totalStake = 0;
 let yourstake = 0;
 let hasBlackJack = false;
@@ -52,17 +51,44 @@ let playerr = {
 playerMoney.innerHTML += "$" + money;
 
 /**WEB3 FUNCTIONS HERE */
-/*
+
 async function connect() {
-if(window.ethereum != "undefined"){
-  try {
-    await window.ethereum.request({method:"eth_RequestAccounts"})
-  }catch(error){
-    console.log(error)
+  if (window.ethereum !== "undefined") {
+    try {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      connectButton.innerHTML = "CONNECTED";
+      Stake.innerHTML = "STAKE ETHER";
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const Contract = new ethers.Contract(contractAddress, ABI, signer);
+      const userBalance = await Contract.getUserBalance();
+      console.log(ethers.utils.formatEther(userBalance));
+      const balance = ethers.utils.formatEther(userBalance);
+      playerMoney.innerHTML =
+        "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
+
+async function web3stake() {
+  if (window.ethereum !== "undefined") {
+    try {
+      userStake = document.getElementById("stake").value;
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const Contract = new ethers.Contract(contractAddress, ABI, signer);
+      await Contract.depositStake(userStake, {
+        value: ethers.utils.parseEther(userStake),
+      });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
-*/
 /**WEB3 FUNCTIONS END */
 
 function getRandomCard() {
@@ -81,7 +107,7 @@ function startGame() {
     alert("HEY,YOU HAVENT PLACED ANY BET YET");
   } else if (hasGameEnded == false) {
     alert("PREVIOUS GAME HASNT ENDED");
-  } else {
+  } else if((hasStaked == true) && (hasGameEnded == true)) {
     isAlive = true;
     hasGameEnded = false;
     winnerEl.textContent = "GAME ON ";
@@ -169,6 +195,7 @@ let compSum = document.getElementById("computer-sum");
 let compCards = document.getElementById("computer-cards");
 
 function computerGame() {
+  
   let computerCard1 = getRandomCard();
   let computerCard2 = getRandomCard();
   computerCards = [computerCard1, computerCard2];
@@ -278,7 +305,7 @@ function stake() {
   } else {
     money = money - yourstake;
     let first = Math.floor(Math.random() * yourstake + 1);
-   total = parseInt(yourstake) + first;
+    total = parseInt(yourstake) + first;
     // alert(total)
     computerStake.innerHTML += first;
     yourStake.innerHTML = "YOUR-STAKE : $" + yourstake;
