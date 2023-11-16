@@ -44,6 +44,7 @@ let computerStake = document.getElementById("computer-stake");
 let totalWin = document.getElementById("total-win");
 let hasStaked = false;
 let hasGameEnded = true;
+let isConnectedToWeb3 = false;
 let playerr = {
   namee: "player",
   price: 890,
@@ -66,6 +67,7 @@ async function connect() {
       const balance = ethers.utils.formatEther(userBalance);
       playerMoney.innerHTML =
         "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      isConnectedToWeb3 = true;
     } catch (error) {
       console.log(error);
     }
@@ -75,15 +77,19 @@ async function connect() {
 async function web3stake() {
   if (window.ethereum !== "undefined") {
     try {
-      userStake = document.getElementById("stake").value;
+      let userStake = document.getElementById("stake").value;
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const Contract = new ethers.Contract(contractAddress, ABI, signer);
-      await Contract.depositStake(userStake, {
-        value: ethers.utils.parseEther(userStake),
-      });
-      
+      const totalBalance = await Contract.depositStake(
+        ethers.utils.parseEther(userStake),
+        {
+          value: ethers.utils.parseEther(userStake),
+        }
+      );
+      console.log(ethers.utils.formatEther(totalBalance));
+      hasStaked = true;
     } catch (error) {
       console.log(error);
     }
@@ -107,7 +113,7 @@ function startGame() {
     alert("HEY,YOU HAVENT PLACED ANY BET YET");
   } else if (hasGameEnded == false) {
     alert("PREVIOUS GAME HASNT ENDED");
-  } else if((hasStaked == true) && (hasGameEnded == true)) {
+  } else if (hasStaked == true && hasGameEnded == true) {
     isAlive = true;
     hasGameEnded = false;
     winnerEl.textContent = "GAME ON ";
@@ -195,7 +201,6 @@ let compSum = document.getElementById("computer-sum");
 let compCards = document.getElementById("computer-cards");
 
 function computerGame() {
-  
   let computerCard1 = getRandomCard();
   let computerCard2 = getRandomCard();
   computerCards = [computerCard1, computerCard2];
@@ -296,7 +301,7 @@ function hold() {
 
 //STAKE CODE
 
-function stake() {
+function web2stake() {
   yourstake = document.getElementById("stake").value;
   if (yourstake > money) {
     alert("INSUFFICIENT BALANCE!");
@@ -313,6 +318,14 @@ function stake() {
 
     totalWin.innerHTML = "TOTAL: $" + total;
     hasStaked = true;
+  }
+}
+
+function stake() {
+  if (isConnectedToWeb3 == true) {
+    web3stake();
+  } else {
+    web2stake();
   }
 }
 
