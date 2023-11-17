@@ -78,7 +78,6 @@ async function web3stake() {
   if (window.ethereum !== "undefined") {
     try {
       let userStake = document.getElementById("stake").value;
-
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const Contract = new ethers.Contract(contractAddress, ABI, signer);
@@ -89,11 +88,11 @@ async function web3stake() {
         }
       );
       console.log(ethers.utils.formatEther(totalBalance));
-      hasStaked = true;
     } catch (error) {
       console.log(error);
     }
   }
+  hasStaked = true;
 }
 /**WEB3 FUNCTIONS END */
 
@@ -146,11 +145,11 @@ function firstDisplay() {
   screen.innerHTML = "your turn";
 }
 
-function renderGame() {
+async function renderGame() {
   card.textContent = "CARDS:";
   for (let i = 0; i < cards.length; i++) {
     card.textContent += cards[i] + ",";
-    // this is for the array
+   
   }
   sumEl.textContent = "sum:" + sum;
   if (sum <= 20) {
@@ -164,8 +163,23 @@ function renderGame() {
     hasGameEnded = true;
     hasStaked = false;
     winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
-    money = money + total;
-    playerMoney.innerHTML = "MONEY:$" + money;
+    if (isConnectedToWeb3 == true) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const Contract = new ethers.Contract(contractAddress, ABI, signer);
+        await Contract.winGame();
+        const userBalance = await Contract.getUserBalance();
+        const balance = ethers.utils.formatEther(userBalance);
+        playerMoney.innerHTML =
+          "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      money = money + total;
+      playerMoney.innerHTML = "MONEY:$" + money;
+    }
     setTimeout(reload, 5000);
   } else {
     message = "you are out of the game";
@@ -173,10 +187,21 @@ function renderGame() {
     isAlive = false;
     hasGameEnded = true;
     hasStaked = false;
-    //money = money - total
-    //playerMoney.innerHTML = "MONEY:$" + money
+    if (isConnectedToWeb3 == true) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const Contract = new ethers.Contract(contractAddress, ABI, signer);
+        await Contract.loseGame();
+        const userBalance = await Contract.getUserBlance();
+        balance = ethers.utils.formatEther(userBalance);
+        playerMoney.innerHTML =
+          "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      } catch (error) {
+        console.log(error);
+      }
+    }
     setTimeout(reload, 5000);
-    // winner()
   }
   messageEL.textContent = message;
 }
@@ -209,7 +234,7 @@ function computerGame() {
   computerGameRender();
 }
 
-function computerGameRender() {
+async function computerGameRender() {
   compCards.textContent = "CARDS:";
   for (let i = 0; i < computerCards.length; i++) {
     compCards.textContent += computerCards[i] + ",";
@@ -224,6 +249,21 @@ function computerGameRender() {
     computerHasBlackJack = true;
     isComputerAlive = true;
     hasGameEnded = true;
+    if (isConnectedToWeb3 == true) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const Contract = new ethers.Contract(contractAddress, ABI, signer);
+        await Contract.loseGame();
+        const userBalance = await Contract.getUserBlance();
+        balance = ethers.utils.formatEther(userBalance);
+        playerMoney.innerHTML =
+          "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      } catch (error) {
+        console.log(error);
+      }
+      setTimeout(reload, 5000);
+    }
     winnerEl.textContent = "YOU LOST!!!!!!!!!!!!!!!!!!!";
     //money = money - total
     playerMoney.innerHTML = "MONEY:$" + money;
@@ -237,8 +277,24 @@ function computerGameRender() {
     winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
     hasBlackJack = true;
     hasStaked = false;
-    money = money + total;
-    playerMoney.innerHTML = "MONEY:$" + money;
+    if (isConnectedToWeb3 == true) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const Contract = new ethers.Contract(contractAddress, ABI, signer);
+        await Contract.winGame();
+        const userBalance = await Contract.getUserBlance();
+        balance = ethers.utils.formatEther(userBalance);
+        playerMoney.innerHTML =
+          "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      } catch (error) {
+        console.log(error);
+      }
+      setTimeout(reload, 5000);
+    } else {
+      money = money + total;
+      playerMoney.innerHTML = "MONEY:$" + money;
+    }
     setTimeout(reload, 5000);
   } else if (computerSum > 21 && sum < 21) {
     computerHasBlackJack = false;
@@ -246,9 +302,25 @@ function computerGameRender() {
     hasGameEnded = true;
     winnerEl.textContent = "YOU WON!!!!!!!!!!!!!";
     hasBlackJack = true;
-    money = money + total;
-    playerMoney.innerHTML = "MONEY:$" + money;
-    setTimeout(reload, 5000);
+    if (isConnectedToWeb3 == true) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const Contract = new ethers.Contract(contractAddress, ABI, signer);
+        await Contract.winGame();
+        const userBalance = await Contract.getUserBalance();
+        let balance = ethers.utils.formatEther(userBalance);
+        playerMoney.innerHTML =
+          "MONEY: " + parseFloat(balance).toFixed(2) + " Ether";
+      } catch (error) {
+        console.log(error);
+      }
+      setTimeout(reload, 5000);
+    } else {
+      money = money + total;
+      playerMoney.innerHTML = "MONEY:$" + money;
+      setTimeout(reload, 5000);
+    }
   }
 }
 function computerNew() {
@@ -332,4 +404,3 @@ function stake() {
 function computerHold() {
   hasComputerPlayed = true;
 }
-//yourstake = 0
