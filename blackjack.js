@@ -9,7 +9,6 @@
 
 import { ethers } from "./ethers-5.6.esm.min.js";
 import { contractAddress, ABI } from "./constant.js";
-
 let connectButton = document.getElementById("connectButton");
 connectButton.onclick = connect;
 
